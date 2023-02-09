@@ -58,6 +58,7 @@ type DownloaderConfig struct {
 	Controller    *controller.Controller
 	FetchBuilders []fetcher.FetcherBuilder
 	Storage       Storage
+	StorageDir    string
 
 	*DownloaderStoreConfig
 }
@@ -75,6 +76,9 @@ func (cfg *DownloaderConfig) Init() *DownloaderConfig {
 	if cfg.Storage == nil {
 		cfg.Storage = NewMemStorage()
 	}
+	if cfg.StorageDir == "" {
+		cfg.StorageDir = "./"
+	}
 
 	if cfg.DownloaderStoreConfig == nil {
 		cfg.DownloaderStoreConfig = &DownloaderStoreConfig{}
@@ -89,7 +93,7 @@ func (cfg *DownloaderConfig) Init() *DownloaderConfig {
 // DownloaderStoreConfig is the config that can restore the downloader.
 type DownloaderStoreConfig struct {
 	RefreshInterval int            `json:"refreshInterval"` // RefreshInterval time duration to refresh task progress(ms)
-	DownloadDir     string         `json:"downloadDir"`     // DownloadDir is the directory to save the downloaded files
+	DownloadDir     string         `json:"downloadDir"`     // DownloadDir is the default directory to save the downloaded files
 	ProtocolConfig  map[string]any `json:"protocolConfig"`  // ProtocolConfig is special config for each protocol
 	Extra           map[string]any `json:"extra"`           // Extra is the extra config
 }
