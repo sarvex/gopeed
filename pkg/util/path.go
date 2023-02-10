@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	syspath "path"
+	"path/filepath"
 	"strings"
 )
 

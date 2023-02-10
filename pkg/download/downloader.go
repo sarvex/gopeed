@@ -13,8 +13,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"os"
-	"path"
 	"strings"
 	"sync"
 	"sync/atomic"
