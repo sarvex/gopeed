@@ -1,37 +1,36 @@
 package extension
 
 import (
-	"fmt"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/eventloop"
 	"github.com/dop251/goja_nodejs/url"
 	"github.com/monkeyWie/gopeed/pkg/download/extension/polyfill/fetch"
-	"os"
 )
 
-func main() {
-	file, err := os.ReadFile("D:\\code\\study\\node\\gopeed-extension-test\\dist\\index.js")
-	if err != nil {
-		panic(err)
-	}
-	SCRIPT := string(file)
+type Engine struct {
+	loop *eventloop.EventLoop
+}
 
-	loop := eventloop.NewEventLoop()
-	loop.Run(func(vm *goja.Runtime) {
+func (e *Engine) Run(script string) (err error) {
+	e.loop.Run(func(vm *goja.Runtime) {
 		url.Enable(vm)
-		if err := fetch.Enable(vm); err != nil {
-			panic(err)
+		if err = fetch.Enable(vm); err != nil {
+			return
 		}
-		SCRIPT = `
-(async function(){
-	const resp = await fetch('https://www.baidu.com')
-	console.log(resp.text())
-})()
-`
-		_, err2 := vm.RunString(SCRIPT)
-		if err2 != nil {
-			fmt.Println(err2.Error())
-		}
-		//vm.RunProgram(prg)
+		_, err = vm.RunString(script)
+		return
 	})
+	return
+}
+
+func NewEngine() *Engine {
+	loop := eventloop.NewEventLoop()
+	return &Engine{
+		loop: loop,
+	}
+}
+
+func Run(script string) (err error) {
+	engine := NewEngine()
+	return engine.Run(script)
 }

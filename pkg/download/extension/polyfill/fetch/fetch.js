@@ -1,4 +1,3 @@
-// Fetch polyfill
 const fetch = (function () {
     const __fetch__ = globalThis.__fetch__;
     delete globalThis.__fetch__;
@@ -55,7 +54,6 @@ const fetch = (function () {
         return new Promise((resolve, reject) => {
             try {
                 const resp = __fetch__(options.method, options.url, options.headers, options.body);
-                // console.log(new Response(resp).text());
                 resolve(new Response(resp));
             } catch (e) {
                 reject(e);

@@ -197,7 +197,7 @@ func (d *Downloader) Resolve(req *base.Request) (rr *ResolveResult, err error) {
 	return
 }
 
-func (d *Downloader) DirectCreate(req *base.Request, opts *base.Options) (taskId string, err error) {
+func (d *Downloader) CreateDirect(req *base.Request, opts *base.Options) (taskId string, err error) {
 	rr, err := d.Resolve(req)
 	if err != nil {
 		return
@@ -524,7 +524,7 @@ func (d *Downloader) restoreFetcher(task *Task) error {
 	return nil
 }
 
-func (d *Downloader) InstallExtensionByUrl(url string) error {
+func (d *Downloader) InstallExtensionByGit(url string) error {
 	ext, err := d.fetchExtensionInfoByGit(url)
 	if err != nil {
 		return err
@@ -537,12 +537,16 @@ func (d *Downloader) InstallExtensionByUrl(url string) error {
 	return nil
 }
 
-func (d *Downloader) InstallExtensionByForFolder(path string) error {
-	d.fetchExtensionInfoByPath(path)
-}
+func (d *Downloader) InstallExtensionByFolder(path string) error {
+	ext, err := d.fetchExtensionInfoByFolder(path)
+	if err != nil {
+		return err
+	}
 
-func (d *Downloader) installExtension(path string) error {
-	d.fetchExtensionInfoByPath(path)
+	if err := util.CopyDir(path, filepath.Join(d.cfg.StorageDir, "extensions", ext.Manifest.Name)); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *Downloader) fetchExtensionInfoByGit(url string) (ext *extension.Extension, err error) {
@@ -562,7 +566,7 @@ func (d *Downloader) fetchExtensionInfoByGit(url string) (ext *extension.Extensi
 	// cut project name
 	_, projectDirName := filepath.Split(url)
 	projectDirName = strings.TrimSuffix(projectDirName, ".git")
-	ext, err = d.fetchExtensionInfoByPath(filepath.Join(extTempDir, projectDirName))
+	ext, err = d.fetchExtensionInfoByFolder(filepath.Join(extTempDir, projectDirName))
 	if err != nil {
 		return
 	}
@@ -570,7 +574,7 @@ func (d *Downloader) fetchExtensionInfoByGit(url string) (ext *extension.Extensi
 	return
 }
 
-func (d *Downloader) fetchExtensionInfoByPath(extPath string) (ext *extension.Extension, err error) {
+func (d *Downloader) fetchExtensionInfoByFolder(extPath string) (ext *extension.Extension, err error) {
 	// resolve extension manifest
 	manifestTempPath := filepath.Join(extPath, "manifest.json")
 	if _, err = os.Stat(manifestTempPath); os.IsNotExist(err) {
