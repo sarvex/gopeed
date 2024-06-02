@@ -1,6 +1,8 @@
 module github.com/GopeedLab/gopeed
 
-go 1.19
+go 1.21
+
+toolchain go1.22.3
 
 require (
 	github.com/anacrolix/missinggo/v2 v2.7.2-0.20230527121029-a582b4f397b9
@@ -9,8 +11,8 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/virtuald/go-paniclog v0.0.0-20190812204905-43a7fa316459
-	go.etcd.io/bbolt v1.3.6
-	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde
+	go.etcd.io/bbolt v1.3.10
+	golang.org/x/sync v0.5.0
 )
 
 replace github.com/anacrolix/torrent => github.com/monkeyWie/torrent v1.52.4-alpha
