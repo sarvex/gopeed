@@ -6,7 +6,7 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.2-0.20230527121029-a582b4f397b9
 	github.com/anacrolix/torrent v1.52.3
 	github.com/gorilla/handlers v1.5.1
-	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/mux v1.8.1
 	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/virtuald/go-paniclog v0.0.0-20190812204905-43a7fa316459
 	go.etcd.io/bbolt v1.3.6
